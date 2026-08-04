@@ -147,6 +147,40 @@ two most likely to need a nudge.
 
 ---
 
+## Deploying (Vercel)
+
+The repo is committed and Vercel-ready: `vercel.json` sets the framework,
+security headers and cache policy, and `.vercelignore` keeps the 112 MB video
+source out of the upload. Next 15 needs no other configuration.
+
+You have to run these yourself — the login step opens a browser and cannot be
+driven from here.
+
+```bash
+npx vercel login
+```
+
+Then, from `D:\work\securetech-next`, a **preview** deploy:
+
+```bash
+npx vercel
+```
+
+That gives a private URL to review. Only once the blockers below are cleared:
+
+```bash
+npx vercel --prod
+```
+
+Alternatively, push the repo to GitHub and import it at vercel.com/new — every
+branch then gets its own preview URL automatically.
+
+**Do not point the live domain at this yet.** The contact and careers forms
+validate and show a success message but post nowhere; on a production domain
+real enquiries would silently vanish. Wire an endpoint first — see item 2.
+
+---
+
 ## Before launch
 
 1. **Transcode the facility film.** The source is 112 MB and is deliberately

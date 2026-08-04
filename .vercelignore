@@ -1,0 +1,6 @@
+# Uncompressed source media — the 112 MB facility film lives here and must
+# never be uploaded. See README "Before launch" for the transcode step.
+_source-assets/
+
+.next/
+node_modules/
