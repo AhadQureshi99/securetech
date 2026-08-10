@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Uncompressed source media - do not ship
 /_source-assets/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat

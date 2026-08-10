@@ -1,0 +1,15 @@
+# Binary assets must never be line-ending converted.
+#
+# core.autocrlf is true on Windows, and Git's content sniffing had already
+# decided the documentation PDF was text — which would have rewritten LF to
+# CRLF on the next checkout and handed anyone cloning the repository a corrupt
+# file. Marking the types explicitly removes the guesswork.
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.mp4 binary
+*.woff binary
+*.woff2 binary
