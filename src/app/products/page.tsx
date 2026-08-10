@@ -1,8 +1,8 @@
 ﻿import type { Metadata } from "next";
 import { CardFactorySolution } from "@/components/sections/CardFactorySolution";
 import { CTA } from "@/components/sections/CTA";
-import { PageHeader } from "@/components/sections/PageHeader";
-import { ProductCatalogue } from "@/components/sections/ProductCatalogue";
+import { ProductRails } from "@/components/sections/ProductRails";
+import { ProductsHero } from "@/components/sections/ProductsHero";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -13,12 +13,8 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
   return (
     <>
-      <PageHeader
-        crumb="Products"
-        title="Fifteen products. One integration surface."
-        lede="The TPS terminal family and the platforms behind it are designed and developed in-house, so the device, the middleware and the database handshake are never three separate procurement problems."
-      />
-      <ProductCatalogue />
+      <ProductsHero />
+      <ProductRails />
       <CardFactorySolution />
       <CTA
         eyebrow="Specification"

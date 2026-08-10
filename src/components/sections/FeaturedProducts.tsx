@@ -3,25 +3,29 @@
 import Link from "next/link";
 import { ArrowButton } from "@/components/brand/ArrowButton";
 import { Eyebrow } from "@/components/brand/Eyebrow";
-import { ProductCinema } from "@/components/products/ProductCinema";
+import { ProductSwitcher } from "@/components/products/ProductSwitcher";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitReveal } from "@/components/motion/SplitReveal";
-import { FEATURED_PRODUCTS, PLATFORM_LINKS } from "@/data/products";
+import { PLATFORM_LINKS, SHOWCASE_PRODUCTS } from "@/data/products";
 
 /**
- * Featured products.
+ * Product Suite.
  *
- * The heading and the catalogue strip bookend a pinned, scroll-scrubbed
- * sequence (`ProductCinema`) in which each device flies out of depth, holds
- * focus, and passes the camera as the next arrives.
+ * Heading block, then a sticky horizontal rail (`ProductScroller`) that
+ * reproduces the scroll interaction on cantor8.io's product section — cards
+ * travelling right-to-left on a vertical stagger, scaling up as they reach
+ * the focus line, with lerp-smoothed motion.
  *
- * This is the one place on the site where motion is the point. Everywhere
- * else stays deliberately restrained — the contrast is what makes this
- * section land instead of blending into a page that is already busy.
+ * The heading sits above the runway rather than inside the sticky frame, so
+ * it scrolls away normally and leaves the full viewport to the rail while it
+ * is pinned.
  */
 export function FeaturedProducts() {
   return (
-    <div className="surface-navy relative overflow-hidden text-white">
+    // No `overflow-hidden` on this wrapper: an overflow ancestor becomes the
+    // sticky containing block, and the rail's sticky frame would scroll away
+    // instead of pinning. Horizontal clipping happens on the frame itself.
+    <div className="surface-navy relative text-white">
       <div
         aria-hidden
         className="dot-matrix pointer-events-none absolute inset-0 text-white opacity-[0.06]"
@@ -29,31 +33,36 @@ export function FeaturedProducts() {
 
       {/* Heading */}
       <div className="container-page relative pt-section pb-[clamp(2.5rem,4vw,4rem)]">
-        <div className="grid items-end gap-x-8 gap-y-6 lg:grid-cols-12">
-          <div className="lg:col-span-7">
+        <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-end">
+          <div className="max-w-2xl">
             <Reveal className="mb-5">
               <Eyebrow index="02" tone="invert">
                 Products
               </Eyebrow>
             </Reveal>
-            <SplitReveal as="h2" className="text-display-lg text-white">
-              Engineered, not rebadged.
+            <SplitReveal as="h2" className="text-display-2xl text-white">
+              Product Suite
             </SplitReveal>
           </div>
-          <div className="lg:col-span-4 lg:col-start-9 lg:pb-1">
-            <Reveal delay={0.1}>
-              <p className="lede text-white/62">
-                Every terminal in the TPS family is designed and developed
-                in-house — which is why we can change the device to fit your
-                programme, rather than the other way round.
-              </p>
-            </Reveal>
-          </div>
+
+          <Reveal delay={0.15} className="shrink-0">
+            <ArrowButton href="/products" variant="outlineInvert">
+              Discover Products
+            </ArrowButton>
+          </Reveal>
         </div>
+
+        <Reveal delay={0.05} className="mt-8">
+          <p className="lede max-w-[46ch] text-white/62">
+            Every terminal in the TPS family is designed and developed
+            in-house — which is why we can change the device to fit your
+            programme, rather than the other way round.
+          </p>
+        </Reveal>
       </div>
 
-      {/* The sequence */}
-      <ProductCinema products={FEATURED_PRODUCTS} />
+      {/* Pinned switcher — one product at a time, changing on scroll */}
+      <ProductSwitcher products={SHOWCASE_PRODUCTS} />
 
       {/* Catalogue strip */}
       <div className="container-page relative pb-section pt-[clamp(2.5rem,4vw,4rem)]">
@@ -66,7 +75,10 @@ export function FeaturedProducts() {
               {PLATFORM_LINKS.map((platform) => (
                 <Link
                   key={platform.slug}
-                  href={`/products#${platform.slug}`}
+                  // The Products page renders the catalogue as pinned rails, so
+                  // a per-card anchor inside a transformed track cannot be
+                  // scrolled to reliably. These land on the platforms rail.
+                  href="/products#platforms"
                   className="whitespace-nowrap rounded-full border border-white/18 px-2.5 py-1 font-mono text-[0.6875rem] tracking-[0.04em] text-white/72 transition-colors duration-300 hover:border-white/40 hover:bg-white/6 hover:text-white"
                 >
                   {platform.label}

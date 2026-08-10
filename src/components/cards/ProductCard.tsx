@@ -106,13 +106,40 @@ export function ProductCard({
             sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
             className={cn(
               product.photo
-                ? "size-full object-cover saturate-[0.85] contrast-[1.04]"
+                ? // Desaturated on purpose — see the duotone overlay below.
+                  "size-full object-cover grayscale contrast-[1.08]"
                 : // Capped by the well in both axes, so a tall shot shrinks to
                   // fit instead of overflowing it.
                   "max-h-full max-w-full object-contain",
             )}
           />
         </motion.div>
+
+        {/*
+          Brand duotone over the photographic tiles.
+
+          The platform products are illustrated with library photography, and
+          six unrelated blue-tinted stock shots side by side read as exactly
+          what they are. Greyscale plus a single `mix-blend-color` wash in brand
+          blue collapses them into one deliberate treatment: still photographs,
+          but unmistakably this site's photographs. The gradient underneath the
+          text edge keeps the label legible whatever the shot is doing there.
+
+          Only `photo` products get this. Device renders are cut-outs on a
+          plinth and must keep their true colour.
+        */}
+        {product.photo ? (
+          <>
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-brand-600 mix-blend-color"
+            />
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-950/60 via-ink-950/10 to-transparent"
+            />
+          </>
+        ) : null}
       </div>
 
       <div

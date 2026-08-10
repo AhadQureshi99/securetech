@@ -252,6 +252,24 @@
   }
 }
 
+/* Instrument sweep across a bounded frame. The animated element is the full
+   height of that frame and carries the line on its top edge, so 0 → 100%
+   is exactly one pass regardless of how large the frame has been sized. */
+@keyframes scan-frame {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  14%,
+  86% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
 /* Hero scan sweep */
 @keyframes scan {
   0% {

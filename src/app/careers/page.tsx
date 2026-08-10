@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Benefits } from "@/components/sections/Benefits";
 import { HiringProcess } from "@/components/sections/HiringProcess";
 import { PageHeader } from "@/components/sections/PageHeader";
+import { Partners } from "@/components/sections/Partners";
 import { Vacancies } from "@/components/sections/Vacancies";
 
 export const metadata: Metadata = {
@@ -21,6 +22,12 @@ export default function CareersPage() {
       <Benefits />
       <Vacancies />
       <HiringProcess />
+      <Partners
+        index="04"
+        eyebrow="Who you would build for"
+        title="Your code ends up in a national programme."
+        lede="Not a pilot that quietly gets shelved. These are the operators, regulators and governments running what this team ships."
+      />
     </>
   );
 }

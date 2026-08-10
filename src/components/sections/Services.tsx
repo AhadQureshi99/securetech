@@ -1,14 +1,13 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
 import { ArrowButton } from "@/components/brand/ArrowButton";
 import { Reveal } from "@/components/motion/Reveal";
 import { SectionHeading } from "@/components/sections/SectionHeading";
 import { SERVICES } from "@/data/services";
-import { gsap, useGSAP, prefersReducedMotion } from "@/lib/gsap";
-import { DUR, GSAP_EASE, SHIFT, STAGGER } from "@/lib/motion";
+import { EASE, STAGGER } from "@/lib/motion";
 
 /**
  * What we do — now the card surface of the page.
@@ -17,38 +16,37 @@ import { DUR, GSAP_EASE, SHIFT, STAGGER } from "@/lib/motion";
  * practice its own object to hover, which is what the brief asked for, and
  * they hold the 2×2 rhythm better than four stacked rows.
  *
+ * Entrance is Framer Motion, not GSAP, and deliberately so: this is the same
+ * scale-and-rise the Products catalogue grid used to run (0.96 → 1 with an
+ * 18px lift on the expo curve), moved here when the Products page went over to
+ * pinned rails. Keeping the exact numbers is the point — the two pages should
+ * not have two nearly-identical card entrances that differ by a hair.
+ *
  * Hover is three cheap, composited changes at once — a 3px lift, the border
  * warming to brand, and a wash fading up from the bottom edge. No scale, no
  * shadow bloom, nothing that moves the text.
  */
+
+const grid: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: STAGGER.card } },
+};
+
+const card: Variants = {
+  hidden: { opacity: 0, scale: 0.96, y: 18 },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE.expo },
+  },
+};
+
 export function Services() {
-  const scope = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const root = scope.current;
-      if (!root || prefersReducedMotion()) return;
-
-      const cards = gsap.utils.toArray<HTMLElement>("[data-service-card]", root);
-
-      gsap.fromTo(
-        cards,
-        { opacity: 0, y: SHIFT.lg },
-        {
-          opacity: 1,
-          y: 0,
-          duration: DUR.reveal,
-          ease: GSAP_EASE.out,
-          stagger: STAGGER.card,
-          scrollTrigger: { trigger: cards[0], start: "top 88%", once: true },
-        },
-      );
-    },
-    { scope },
-  );
+  const reduce = useReducedMotion();
 
   return (
-    <section ref={scope} id="capabilities" className="scroll-mt-24 bg-ink-50 py-section">
+    <section id="capabilities" className="scroll-mt-24 bg-ink-50 py-section">
       <div className="container-page">
         <SectionHeading
           index="01"
@@ -57,13 +55,19 @@ export function Services() {
           lede="Four practices, one delivery team. We take identity programmes from specification to deployed terminals — and we own every layer in between."
         />
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:gap-6">
+        <motion.div
+          variants={reduce ? undefined : grid}
+          initial={reduce ? undefined : "hidden"}
+          whileInView={reduce ? undefined : "show"}
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid gap-5 sm:grid-cols-2 lg:gap-6"
+        >
           {SERVICES.map((service) => {
             const Icon = service.icon;
             return (
-              <article
+              <motion.article
                 key={service.index}
-                data-service-card
+                variants={reduce ? undefined : card}
                 className="group relative isolate flex flex-col overflow-hidden rounded-lg border border-[var(--hairline)] bg-white p-[clamp(1.5rem,2.4vw,2.25rem)] transition-[transform,border-color] duration-400 ease-[var(--ease-expo)] hover:-translate-y-[3px] hover:border-brand-200"
               >
                 {/* Wash rises from the bottom edge on hover */}
@@ -109,10 +113,10 @@ export function Services() {
                   className="absolute inset-0"
                   aria-label={`Discuss ${service.title}`}
                 />
-              </article>
+              </motion.article>
             );
           })}
-        </div>
+        </motion.div>
 
         <Reveal className="mt-10">
           <ArrowButton href="/products" variant="ghost" size="sm">
