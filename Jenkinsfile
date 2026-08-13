@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t localhost/securetech:optimized .'
+                sh 'docker build -t localhost/securetech:latest .'
             }
         }
 

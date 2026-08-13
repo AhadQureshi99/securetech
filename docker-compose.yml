@@ -1,6 +1,6 @@
 services:
   securetech:
-    image: localhost/securetech:optimized
+    image: localhost/securetech:latest
     container_name: securetech
     ports:
       - "3000:3000"
